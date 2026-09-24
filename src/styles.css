@@ -1,0 +1,132 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f4f7;
+  color: #333;
+}
+
+.app-container {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- ÁREA DO CROQUI --- */
+.croquis-stage-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.croquis-container {
+  position: relative;
+  width: 320px;
+  height: 600px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Ordem das camadas (Z-Index) */
+.layer-body   { z-index: 10; }
+.layer-shoes  { z-index: 20; }
+.layer-bottom { z-index: 30; }
+.layer-top    { z-index: 40; }
+.layer-hat    { z-index: 50; }
+
+.stage-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-action {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #222;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-action:hover {
+  opacity: 0.9;
+}
+
+/* --- CATALOGO E FILTROS --- */
+.catalog-container {
+  flex: 1;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.btn-filter {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+
+.btn-filter.active {
+  background: #e07a5f;
+  color: #fff;
+  border-color: #e07a5f;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.garment-card {
+  border: 2px solid #eee;
+  border-radius: 12px;
+  padding: 0.8rem;
+  text-align: center;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.garment-card.active {
+  border-color: #e07a5f;
+  background-color: #fff8f6;
+}
+
+.garment-card img {
+  width: 100%;
+  height: 90px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
