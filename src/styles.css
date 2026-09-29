@@ -1,132 +1,282 @@
+:root {
+  --blue-dark: #0f1c3f;
+  --blue-royal: #1e3a8a;
+  --blue-medium: #2563eb;
+  --blue-sky: #60a5fa;
+  --blue-light: #f0f7ff;
+  --blue-accent: #38bdf8;
+  --glitter-glow: rgba(56, 189, 248, 0.4);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  background-color: #f4f4f7;
-  color: #333;
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--blue-dark);
+  color: #ffffff;
+  min-height: 100vh;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.15) 1px, transparent 2px),
+    radial-gradient(circle at 80% 70%, rgba(96, 165, 250, 0.2) 1px, transparent 2px),
+    radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.25) 1px, transparent 2px),
+    linear-gradient(135deg, #0a1128 0%, #1c2d5a 100%);
+  background-size: 100px 100px, 150px 150px, 80px 80px, 100% 100%;
 }
 
-.app-container {
+.site-wrapper {
   display: flex;
-  gap: 2rem;
-  padding: 2rem;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* NAVBAR FIXA NO TOPO */
+.navbar {
+  width: 100%;
+  background: rgba(15, 28, 63, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(96, 165, 250, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.navbar-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* --- ÁREA DO CROQUI --- */
-.croquis-stage-wrapper {
+.navbar-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(135deg, #ffffff 0%, var(--blue-sky) 50%, var(--blue-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px var(--glitter-glow);
+  letter-spacing: 1px;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 36px; /* Aumentado o espaço entre o logo e 'Início' e os restantes links */
+}
+
+.navbar-links a {
+  color: var(--blue-light);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 4px 0;
+}
+
+.navbar-links a:hover {
+  color: var(--blue-accent);
+}
+
+.navbar-links a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--blue-accent);
+  transition: width 0.3s ease;
+}
+
+.navbar-links a:hover::after {
+  width: 100%;
+}
+
+/* CONTAINER DAS PÁGINAS ABAIXO DA NAVBAR */
+.app-container {
+  width: 95%;
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 24px;
+  background: rgba(15, 28, 63, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--glitter-glow);
+}
+
+/* LAYOUT PROVADOR */
+.provador-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 850px) {
+  .provador-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* PAINEL CROQUI */
+.croqui-panel {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  box-shadow: inset 0 0 15px rgba(37, 99, 235, 0.1), 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .croquis-container {
   position: relative;
-  width: 320px;
-  height: 600px;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  overflow: hidden;
+  width: 100%;
+  height: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .layer {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  max-height: 100%;
   object-fit: contain;
-  pointer-events: none;
 }
 
-/* Ordem das camadas (Z-Index) */
-.layer-body   { z-index: 10; }
-.layer-shoes  { z-index: 20; }
-.layer-bottom { z-index: 30; }
-.layer-top    { z-index: 40; }
-.layer-hat    { z-index: 50; }
+.layer-body {
+  z-index: 1;
+}
 
-.stage-actions {
+/* CONTROLES E BOTÕES */
+.controls {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
 }
 
-.btn-action {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  background-color: #222;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn-action:hover {
-  opacity: 0.9;
-}
-
-/* --- CATALOGO E FILTROS --- */
-.catalog-container {
+button {
   flex: 1;
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-
-.filter-bar {
-  display: flex;
-  gap: 0.5rem;
-  margin: 1rem 0;
-}
-
-.btn-filter {
-  padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  background: #f8f8f8;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.82rem;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.btn-filter.active {
-  background: #e07a5f;
-  color: #fff;
-  border-color: #e07a5f;
+.btn-toggle {
+  background: linear-gradient(135deg, var(--blue-royal), var(--blue-medium));
+  color: #ffffff;
+  border: 1px solid var(--blue-sky);
 }
 
-.cards-grid {
+.btn-toggle:hover {
+  box-shadow: 0 0 12px var(--blue-sky);
+  transform: translateY(-2px);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+  color: #ffffff;
+  border: 1px solid var(--blue-sky);
+}
+
+.btn-save:hover {
+  box-shadow: 0 0 12px var(--blue-sky);
+  transform: translateY(-2px);
+}
+
+.btn-download {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #ffffff;
+}
+
+.btn-download:hover {
+  box-shadow: 0 0 12px var(--blue-accent);
+  transform: translateY(-2px);
+}
+
+/* CATÁLOGO DE ROUPAS */
+.catalog-panel h2 {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-bottom: 16px;
+  border-left: 4px solid var(--blue-accent);
+  padding-left: 10px;
+}
+
+.garment-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 16px;
 }
 
 .garment-card {
-  border: 2px solid #eee;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(96, 165, 250, 0.2);
   border-radius: 12px;
-  padding: 0.8rem;
+  padding: 12px;
   text-align: center;
-  background: #fff;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s ease;
+}
+
+.garment-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--blue-sky);
+  transform: translateY(-3px);
 }
 
 .garment-card.active {
-  border-color: #e07a5f;
-  background-color: #fff8f6;
+  background: rgba(37, 99, 235, 0.3);
+  border: 2px solid var(--blue-accent);
+  box-shadow: 0 0 12px var(--glitter-glow);
 }
 
 .garment-card img {
   width: 100%;
   height: 90px;
   object-fit: contain;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
+}
+
+.garment-card p {
+  font-size: 0.85rem;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* OUTRAS PÁGINAS */
+.home-container, .saved-container {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.btn-primary {
+  padding: 14px 28px;
+  font-size: 1rem;
+  background: linear-gradient(135deg, var(--blue-medium), var(--blue-accent));
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 0 15px var(--glitter-glow);
+  transition: transform 0.2s;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
 }
