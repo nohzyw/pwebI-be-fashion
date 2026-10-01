@@ -25,8 +25,11 @@ function toggleViewMode() {
     btn.textContent = 'Ver Costas';
   }
 }
-
-// Salvar look
 function salvarLook() {
   alert('Look salvo com sucesso!');
+}
+
+function selectCategory(categoryName) {
+  const display = document.getElementById('items-display');
+  display.innerHTML = `<p style="color: #38bdf8; font-weight: bold;">Exibindo peças para: ${categoryName.toUpperCase()}</p>`;
 }
