@@ -1,4 +1,3 @@
-// Alternar entre as páginas
 function navigate(pageId) {
   const pages = document.querySelectorAll('.page-section');
   pages.forEach(page => page.style.display = 'none');
@@ -9,7 +8,6 @@ function navigate(pageId) {
   }
 }
 
-// Alternar entre frente e costas do manequim
 let viewMode = 'front';
 function toggleViewMode() {
   const img = document.getElementById('manequim-img');
