@@ -12,7 +12,6 @@
 <body>
 
   <div class="site-wrapper">
-    <!-- BARRA DE NAVEGAÇÃO -->
     <nav class="navbar">
       <div class="navbar-container">
         <a href="#" class="navbar-logo" onclick="navigate('home')">Be Fashion</a>
@@ -24,11 +23,8 @@
         </div>
       </div>
     </nav>
-
-    <!-- CONTEÚDO PRINCIPAL -->
     <main class="app-container">
 
-      <!-- PÁGINA 1: INÍCIO -->
       <section id="page-home" class="page-section" style="display: block;">
         <div class="hero-container" style="text-align: center; padding: 60px 20px;">
           <h1 style="font-size: 2.5rem; margin-bottom: 20px; color: #fff;">Bem-vindo ao Be Fashion</h1>
@@ -39,11 +35,9 @@
         </div>
       </section>
 
-      <!-- PÁGINA 2: PROVADOR VIRTUAL (Manequim + Opções de Roupa) -->
       <section id="page-provador" class="page-section" style="display: none;">
         <div class="provador-container" style="display: flex; gap: 30px; justify-content: center; align-items: flex-start; padding: 20px; flex-wrap: wrap;">
           
-          <!-- Manequim -->
           <div class="manequim-box" style="text-align: center; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; min-width: 280px;">
             <img id="manequim-img" src="assets/manequim-frente.png" alt="Manequim" style="max-height: 400px; width: auto;" />
             <div style="margin-top: 15px;">
@@ -52,7 +46,6 @@
             </div>
           </div>
 
-          <!-- Opções de Roupa no Provador -->
           <div class="wardrobe-box" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; max-width: 450px; width: 100%;">
             <h3 style="margin-bottom: 15px; color: #38bdf8; text-align: center;">Opções de Roupa</h3>
             
@@ -78,7 +71,6 @@
         </div>
       </section>
 
-      <!-- PÁGINA 3: ROTA GUARDA-ROUPA (Vazia) -->
       <section id="page-wardrobe" class="page-section" style="display: none;">
         <div style="text-align: center; padding: 60px 20px;">
           <h2 style="color: #38bdf8; margin-bottom: 10px;">Guarda-Roupa</h2>
@@ -86,7 +78,6 @@
         </div>
       </section>
 
-      <!-- PÁGINA 4: MEUS LOOKS -->
       <section id="page-guardados" class="page-section" style="display: none;">
         <div style="text-align: center; padding: 40px;">
           <h2>Meus Looks Salvos</h2>
