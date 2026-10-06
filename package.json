@@ -4,7 +4,7 @@
   "description": "- Node.js 18 ou superior\r - VS Code",
   "main": "script.js",
   "scripts": {
-    "dev": "node server.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",

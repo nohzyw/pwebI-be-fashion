@@ -6,12 +6,12 @@ const PORT = 5173;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.static(path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.get('/montar-look', (req, res) => {
-    res.render('montar-look');
+app.listen(PORT, () => {
+    console.log(`Servidor executando em http://localhost:${PORT}`);
 });
