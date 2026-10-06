@@ -1,0 +1,12 @@
+# IDEs e editores
+.vscode/
+.idea/
+
+# Arquivos do Sistema Operacional
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Logs e variáveis de ambiente
+*.log
+.env
