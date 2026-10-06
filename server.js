@@ -1,19 +1,20 @@
 const express = require('express');
 const path = require('path');
-
 const app = express();
 const PORT = 5173;
 
+// Configurar o motor de templates EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Servir ficheiros estáticos (CSS, JS, Imagens)
 app.use(express.static(__dirname));
 
-app.get('/montar-look', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
+// Rota principal
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+    res.render('index');
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em: http://localhost:${PORT}/montar-look`);
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

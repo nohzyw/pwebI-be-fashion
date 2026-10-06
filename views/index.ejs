@@ -1,0 +1,74 @@
+<%- include('partials/header') %>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="app-container">
+
+      <!-- PÁGINA 1: INÍCIO -->
+      <section id="page-home" class="page-section" style="display: block;">
+        <div class="hero-container" style="text-align: center; padding: 60px 20px;">
+          <h1 style="font-size: 2.5rem; margin-bottom: 20px; color: #fff;">Bem-vindo ao Be Fashion</h1>
+          <p style="font-size: 1.2rem; color: #cbd5e1; margin-bottom: 30px;">Crie, experimente e monte os seus looks em tempo real.</p>
+          <button class="btn-primary" onclick="navigate('provador')" style="padding: 12px 28px; font-size: 1rem; cursor: pointer;">
+            Abrir Provador Virtual
+          </button>
+        </div>
+      </section>
+
+      <!-- PÁGINA 2: PROVADOR VIRTUAL (Manequim + Opções de Roupa) -->
+      <section id="page-provador" class="page-section" style="display: none;">
+        <div class="provador-container" style="display: flex; gap: 30px; justify-content: center; align-items: flex-start; padding: 20px; flex-wrap: wrap;">
+          
+          <!-- Manequim -->
+          <div class="manequim-box" style="text-align: center; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; min-width: 280px;">
+            <img id="manequim-img" src="assets/manequim-frente.png" alt="Manequim" style="max-height: 400px; width: auto;" />
+            <div style="margin-top: 15px;">
+              <button id="btn-toggle" class="btn-secondary" onclick="toggleViewMode()" style="padding: 8px 16px; margin-right: 10px; cursor: pointer;">Ver Costas</button>
+              <button class="btn-primary" onclick="salvarLook()" style="padding: 8px 16px; cursor: pointer;">Salvar Look</button>
+            </div>
+          </div>
+
+          <!-- Opções de Roupa no Provador -->
+          <div class="wardrobe-box" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; max-width: 450px; width: 100%;">
+            <h3 style="margin-bottom: 15px; color: #38bdf8; text-align: center;">Opções de Roupa</h3>
+            
+            <div class="category-buttons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px;">
+              <button class="btn-category" onclick="selectCategory('Chapéu')">🎩 Chapéu</button>
+              <button class="btn-category" onclick="selectCategory('Cabelo')">💇 Cabelo</button>
+              <button class="btn-category" onclick="selectCategory('Óculos')">🕶️️ Óculos</button>
+              <button class="btn-category" onclick="selectCategory('Colar')">📿 Colar</button>
+              <button class="btn-category" onclick="selectCategory('Camisa')">👕 Camisa</button>
+              <button class="btn-category" onclick="selectCategory('Casaco')">🧥 Casaco</button>
+              <button class="btn-category" onclick="selectCategory('Calças')">👖 Calças</button>
+              <button class="btn-category" onclick="selectCategory('Saias')">👗 Saias</button>
+              <button class="btn-category" onclick="selectCategory('Vestidos')">🥻 Vestidos</button>
+              <button class="btn-category" onclick="selectCategory('Meias-calças')">🧦 Meias-calças</button>
+              <button class="btn-category" onclick="selectCategory('Calçados')">👟 Calçados</button>
+            </div>
+
+            <div id="items-display" style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; text-align: center; color: #94a3b8;">
+              <p>Selecione uma categoria acima para experimentar as peças.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- PÁGINA 3: ROTA GUARDA-ROUPA (Vazia) -->
+      <section id="page-wardrobe" class="page-section" style="display: none;">
+        <div style="text-align: center; padding: 60px 20px;">
+          <h2 style="color: #38bdf8; margin-bottom: 10px;">Guarda-Roupa</h2>
+          <p style="color: #94a3b8;">Nenhuma peça cadastrada no momento.</p>
+        </div>
+      </section>
+
+      <!-- PÁGINA 4: MEUS LOOKS -->
+      <section id="page-guardados" class="page-section" style="display: none;">
+        <div style="text-align: center; padding: 40px;">
+          <h2>Meus Looks Salvos</h2>
+          <p style="color: #94a3b8; margin-top: 10px;">Nenhum look guardado ainda.</p>
+        </div>
+      </section>
+
+    </main>
+
+<%- include('partials/footer') %>
