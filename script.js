@@ -1,4 +1,3 @@
-// Alternar entre as páginas
 function navigate(pageId) {
   const pages = document.querySelectorAll('.page-section');
   pages.forEach(page => page.style.display = 'none');

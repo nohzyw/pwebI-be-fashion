@@ -33,7 +33,6 @@ body {
   min-height: 100vh;
 }
 
-/* NAVBAR FIXA NO TOPO */
 .navbar {
   width: 100%;
   background: rgba(15, 28, 63, 0.95);
@@ -68,7 +67,7 @@ body {
 
 .navbar-links {
   display: flex;
-  gap: 36px; /* Aumentado o espaço entre o logo e 'Início' e os restantes links */
+  gap: 36px;
 }
 
 .navbar-links a {
@@ -100,7 +99,6 @@ body {
   width: 100%;
 }
 
-/* CONTAINER DAS PÁGINAS ABAIXO DA NAVBAR */
 .app-container {
   width: 95%;
   max-width: 1100px;
@@ -113,7 +111,6 @@ body {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--glitter-glow);
 }
 
-/* LAYOUT PROVADOR */
 .provador-layout {
   display: grid;
   grid-template-columns: 380px 1fr;
@@ -127,7 +124,6 @@ body {
   }
 }
 
-/* PAINEL CROQUI */
 .croqui-panel {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
@@ -157,7 +153,6 @@ body {
   z-index: 1;
 }
 
-/* CONTROLES E BOTÕES */
 .controls {
   display: flex;
   gap: 8px;
@@ -208,7 +203,6 @@ button {
   transform: translateY(-2px);
 }
 
-/* CATÁLOGO DE ROUPAS */
 .catalog-panel h2 {
   font-size: 1.4rem;
   color: #ffffff;
@@ -258,7 +252,6 @@ button {
   font-weight: 500;
 }
 
-/* OUTRAS PÁGINAS */
 .home-container, .saved-container {
   text-align: center;
   padding: 40px 20px;
