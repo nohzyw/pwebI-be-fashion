@@ -1,12 +1,22 @@
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Produção
+dist/
+dist-zip/
+build/
+
 # IDEs e editores
 .vscode/
 .idea/
 
-# Arquivos do Sistema Operacional
-.DS_Store
-Thumbs.db
-*.tmp
-
-# Logs e variáveis de ambiente
+# Logs e ambiente
 *.log
 .env
+.env.local
+
+# Ficheiros do SO
+.DS_Store
+Thumbs.db

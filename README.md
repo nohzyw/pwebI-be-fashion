@@ -1,19 +1,24 @@
-# Be Fashion — Provador Virtual
+# Ateliê Dourado — provador feminino
 
-# Projeto de provador virtual interativo feito para a disciplina de Programação Web.
+## Requisitos
+- Node.js 18 ou superior
+- VS Code
 
-# Tecnologias
-* HTML5
-* CSS3
-* JavaScript (Vanilla)
+## Instalação
+```bash
+npm install
+npm run dev
+```
 
-# Como rodar o projeto
+Abra no navegador: http://localhost:5173/montar-look
 
-* **Pelo navegador:** Basta dar dois cliques no arquivo `index.html`.
-* **Pelo terminal / Localhost:** Rode `npx serve .` na pasta do projeto e acesse `http://localhost:3000`.
+## Rotas
+- `/` — redirecionamento visual para o montador
+- `/montar-look` — provador principal
+- `/estilos` — catálogo de estilos
+- `/guarda-roupa` — guarda-roupa
+- `/favoritos` — looks favoritos
+- `/perfil` — perfil
+- `/configuracoes` — configurações
 
-# Páginas do projeto
-* **Início:** Apresentação da plataforma.
-* **Provador Virtual:** Área com o manequim (frente e costas) e seleção de roupas.
-* **Guarda-Roupa:** Espaço reservado para o catálogo de peças.
-* **Meus Looks:** Área para os looks salvos.
+A interface é um protótipo visual: botões e navegação funcionam, mas não há persistência nem troca real das peças ainda.

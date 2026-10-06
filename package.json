@@ -1,0 +1,15 @@
+{
+  "name": "be-fashion",
+  "version": "1.0.0",
+  "description": "- Node.js 18 ou superior\r - VS Code",
+  "main": "script.js",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
