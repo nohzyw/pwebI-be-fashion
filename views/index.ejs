@@ -1,4 +1,4 @@
-<%- include('partials/header') %>
+﻿<%- include('partials/header') %>
 <main class="app-container">
 
       <section id="page-home" class="page-section" style="display: block;">
@@ -28,7 +28,7 @@
             <div class="category-buttons" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px;">
               <button class="btn-category" onclick="selectCategory('Chapéu')">🎩 Chapéu</button>
               <button class="btn-category" onclick="selectCategory('Cabelo')">💇 Cabelo</button>
-              <button class="btn-category" onclick="selectCategory('Óculos')">🕶️️ Óculos</button>
+              <button class="btn-category" onclick="selectCategory('Óculos')">🕶 Óculos</button>
               <button class="btn-category" onclick="selectCategory('Colar')">📿 Colar</button>
               <button class="btn-category" onclick="selectCategory('Camisa')">👕 Camisa</button>
               <button class="btn-category" onclick="selectCategory('Casaco')">🧥 Casaco</button>
@@ -48,16 +48,20 @@
       </section>
 
       <section id="page-wardrobe" class="page-section" style="display: none;">
-        <div style="text-align: center; padding: 60px 20px;">
+        <div style="text-align: center; padding: 40px 20px;">
           <h2 style="color: #38bdf8; margin-bottom: 10px;">Guarda-Roupa</h2>
-          <p style="color: #94a3b8;">Nenhuma peça cadastrada no momento.</p>
+          <div id="wardrobe-list">
+            <p style="color: #94a3b8;">Carregando peças...</p>
+          </div>
         </div>
       </section>
 
       <section id="page-guardados" class="page-section" style="display: none;">
         <div style="text-align: center; padding: 40px;">
-          <h2>Meus Looks Salvos</h2>
-          <p style="color: #94a3b8; margin-top: 10px;">Nenhum look guardado ainda.</p>
+          <h2 style="color: #38bdf8; margin-bottom: 10px;">Meus Looks Salvos</h2>
+          <div id="saved-looks-list">
+            <p style="color: #94a3b8; margin-top: 10px;">Nenhum look guardado ainda.</p>
+          </div>
         </div>
       </section>
 
