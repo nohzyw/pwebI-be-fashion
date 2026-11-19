@@ -1,6 +1,15 @@
 ﻿let todasAsPecas = [];
 let lookAtual = {};
 
+const AJUSTES_CATEGORIAS = {
+  calcados: { x: 0, y: 0, scaleX: 1, scaleY: 1, origin: 'center bottom' },
+  chapeu: { x: 0, y: 0, scaleX: 1, scaleY: 1, origin: 'center top' },
+  oculos: { x: 0, y: 0, scaleX: 1, scaleY: 1, origin: 'center top' },
+  cabelo: { x: 0, y: 0, scaleX: 1, scaleY: 1, origin: 'center top' }
+};
+
+const AJUSTES_PECAS = {};
+
 document.addEventListener('DOMContentLoaded', async () => {
   await carregarPecas();
   renderizarGuardaRoupa();
@@ -10,7 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function carregarPecas() {
   try {
     const res = await fetch('/api/pecas');
-    todasAsPecas = await res.json();
+    const dados = await res.json();
+    todasAsPecas = dados.filter(p => !normalizar(p.nome).includes('salto'));
   } catch (err) {
     console.error('Erro ao carregar peças:', err);
   }
@@ -67,6 +77,17 @@ function obterZoomMiniatura(categoria) {
     return 'transform: scale(4.2); transform-origin: bottom center;';
   }
   return 'transform: scale(2.2); transform-origin: center;';
+}
+
+function obterAjusteCamada(nome, chaveCat) {
+  const chaveNome = normalizar(nome);
+  if (AJUSTES_PECAS[chaveNome]) return AJUSTES_PECAS[chaveNome];
+
+  for (const [catKey, ajuste] of Object.entries(AJUSTES_CATEGORIAS)) {
+    if (chaveCat.includes(catKey)) return ajuste;
+  }
+
+  return { x: 0, y: 0, scaleX: 1, scaleY: 1, origin: 'center center' };
 }
 
 async function selectCategory(categoryName) {
@@ -133,6 +154,7 @@ function vestirPeca(nome, categoria, imagemUrl, zIndex) {
 
   const rectManequim = manequimImg.getBoundingClientRect();
   const rectContainer = container.getBoundingClientRect();
+  const ajuste = obterAjusteCamada(nome, chaveCat);
 
   camada.src = imagemUrl;
   camada.style.position = 'absolute';
@@ -143,6 +165,8 @@ function vestirPeca(nome, categoria, imagemUrl, zIndex) {
   camada.style.objectFit = 'contain';
   camada.style.pointerEvents = 'none';
   camada.style.zIndex = (Number(zIndex) || 1) + 10;
+  camada.style.transformOrigin = ajuste.origin;
+  camada.style.transform = `translate(${ajuste.x}%, ${ajuste.y}%) scale(${ajuste.scaleX}, ${ajuste.scaleY})`;
 
   lookAtual[chaveCat] = { nome, categoria, imagemUrl, zIndex };
 }
