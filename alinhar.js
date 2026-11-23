@@ -36,4 +36,41 @@ async function removerPreto(buffer) {
       data[i + 3] = 0;
     }
   }
-  return sharp(data, { raw: { width: info.
+  return sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toBuffer();
+}
+
+(async () => {
+  for (const p of PECAS) {
+    const entrada = path.join(__dirname, 'public', 'assets', 'temp-roupas', p.src);
+    const saida = path.join(__dirname, 'public', 'assets', p.out);
+
+    if (!fs.existsSync(entrada)) {
+      console.log(`Arquivo não encontrado: ${p.src}`);
+      continue;
+    }
+
+    let imgBuffer = await sharp(entrada)
+      .trim()
+      .resize(p.w, p.h, { fit: 'fill' })
+      .png()
+      .toBuffer();
+
+    if (p.removerFundoPreto) {
+      imgBuffer = await removerPreto(imgBuffer);
+    }
+
+    await sharp({
+      create: {
+        width: LARGURA_MANEQUIM,
+        height: ALTURA_MANEQUIM,
+        channels: 4,
+        background: { r: 0, g: 0, b: 0, alpha: 0 }
+      }
+    })
+      .composite([{ input: imgBuffer, left: p.left, top: p.top }])
+      .png()
+      .toFile(saida);
+
+    console.log(`Gerado: public/assets/${p.out}`);
+  }
+})();
