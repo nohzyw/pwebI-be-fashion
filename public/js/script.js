@@ -45,25 +45,6 @@ function navigate(pageId) {
   if (pageId === 'guardados') renderizarLooksSalvos();
 }
 
-let viewMode = 'front';
-
-function toggleViewMode() {
-  const img = document.getElementById('manequim-img');
-  const btn = document.getElementById('btn-toggle');
-
-  if (!img || !btn) return;
-
-  if (viewMode === 'front') {
-    viewMode = 'back';
-    img.src = '/assets/manequim-costa.png';
-    btn.textContent = 'Ver Frente';
-  } else {
-    viewMode = 'front';
-    img.src = '/assets/manequim-frente.png';
-    btn.textContent = 'Ver Costas';
-  }
-}
-
 function normalizar(texto) {
   return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 }
@@ -171,6 +152,11 @@ function vestirPeca(nome, categoria, imagemUrl, zIndex) {
   lookAtual[chaveCat] = { nome, categoria, imagemUrl, zIndex };
 }
 
+function limparTudo() {
+  document.querySelectorAll('[id^="camada-"]').forEach(camada => camada.remove());
+  lookAtual = {};
+}
+
 function renderizarGuardaRoupa() {
   const container = document.getElementById('wardrobe-list');
   if (!container) return;
@@ -227,20 +213,65 @@ function renderizarLooksSalvos() {
     return;
   }
 
-  let html = `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; max-width: 900px; margin: 20px auto;">`;
+  let html = `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; max-width: 960px; margin: 20px auto;">`;
+
   salvos.forEach((look, index) => {
-    const miniaturas = look.pecas.map(p =>
-      `<img src="${p.imagemUrl}" title="${p.nome}" style="width: 50px; height: 50px; object-fit: contain; background: #0f172a; border-radius: 6px; padding: 4px;">`
-    ).join('');
+    const camadasHtml = look.pecas.map(p => {
+      const chaveCat = normalizar(p.categoria);
+      const ajuste = obterAjusteCamada(p.nome, chaveCat);
+      const z = (Number(p.zIndex) || 1) + 10;
+      const src = corrigirUrlImagem(p.imagemUrl);
+
+      return `
+        <img src="${src}" alt="${p.nome}" title="${p.nome}"
+             style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; z-index: ${z}; transform-origin: ${ajuste.origin}; transform: translate(${ajuste.x}%, ${ajuste.y}%) scale(${ajuste.scaleX}, ${ajuste.scaleY});">
+      `;
+    }).join('');
 
     html += `
-      <div style="background: rgba(255,255,255,0.05); border: 1px solid #334155; border-radius: 12px; padding: 15px;">
-        <h4 style="color: #38bdf8; margin-bottom: 6px;">Look #${index + 1}</h4>
+      <div style="background: rgba(255,255,255,0.05); border: 1px solid #334155; border-radius: 12px; padding: 15px; text-align: center;">
+        <h4 style="color: #38bdf8; margin-bottom: 4px;">Look #${index + 1}</h4>
         <p style="color: #94a3b8; font-size: 0.75rem; margin-bottom: 10px;">Salvo em ${look.data}</p>
-        <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">${miniaturas}</div>
+
+        <div style="position: relative; width: 180px; height: 270px; margin: 0 auto 12px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; overflow: hidden;">
+          <img src="/assets/manequim-frente.png" alt="Manequim" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+          ${camadasHtml}
+        </div>
+
+        <div style="display: flex; gap: 8px; justify-content: center;">
+          <button onclick="experimentarLookSalvo(${look.id})" style="padding: 6px 12px; font-size: 0.8rem; cursor: pointer; background: #38bdf8; color: #0f172a; border: none; border-radius: 6px; font-weight: 600;">
+            Usar no Provador
+          </button>
+          <button onclick="excluirLookSalvo(${look.id})" style="padding: 6px 10px; font-size: 0.8rem; cursor: pointer; background: #ef4444; color: #fff; border: none; border-radius: 6px;">
+            Excluir
+          </button>
+        </div>
       </div>
     `;
   });
+
   html += `</div>`;
   container.innerHTML = html;
+}
+
+function experimentarLookSalvo(id) {
+  const salvos = JSON.parse(localStorage.getItem('befashion_looks') || '[]');
+  const look = salvos.find(l => l.id === id);
+  if (!look) return;
+
+  navigate('provador');
+  limparTudo();
+
+  requestAnimationFrame(() => {
+    look.pecas.forEach(p => {
+      vestirPeca(p.nome, p.categoria, corrigirUrlImagem(p.imagemUrl), p.zIndex);
+    });
+  });
+}
+
+function excluirLookSalvo(id) {
+  const salvos = JSON.parse(localStorage.getItem('befashion_looks') || '[]');
+  const atualizados = salvos.filter(l => l.id !== id);
+  localStorage.setItem('befashion_looks', JSON.stringify(atualizados));
+  renderizarLooksSalvos();
 }
