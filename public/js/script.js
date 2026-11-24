@@ -1,10 +1,10 @@
-ï»¿let todasAsPecas = [];
+let todasAsPecas = [];
 let lookAtual = {};
 
 const AJUSTES_CATEGORIAS = {
   calcados: { x: 0, y: 0, scaleX: 1, scaleY: 1, origin: 'center bottom' },
   chapeu: { x: 0, y: 0, scaleX: 1, scaleY: 1, origin: 'center top' },
-  oculos: { x: 0, y: 0, scaleX: 1, scaleY: 1, origin: 'center top' },
+  oculos: { x: 0, y: 1.5, scaleX: 1, scaleY: 1, origin: 'center top' },
   cabelo: { x: 0, y: 0, scaleX: 1, scaleY: 1, origin: 'center top' }
 };
 
@@ -22,7 +22,7 @@ async function carregarPecas() {
     const dados = await res.json();
     todasAsPecas = dados;
   } catch (err) {
-    console.error('Erro ao carregar peÃ§as:', err);
+    console.error('Erro ao carregar peças:', err);
   }
 }
 
@@ -83,10 +83,10 @@ async function selectCategory(categoryName) {
     p => normalizar(p.categoria) === normalizar(categoryName)
   );
 
-  let html = `<p style="color: #38bdf8; font-weight: bold; margin-bottom: 12px;">Exibindo peÃ§as para: ${categoryName.toUpperCase()}</p>`;
+  let html = `<p style="color: #38bdf8; font-weight: bold; margin-bottom: 12px;">Exibindo peças para: ${categoryName.toUpperCase()}</p>`;
 
   if (filtradas.length === 0) {
-    html += `<p style="color: #94a3b8; font-size: 0.9rem;">Nenhuma peÃ§a cadastrada nesta categoria.</p>`;
+    html += `<p style="color: #94a3b8; font-size: 0.9rem;">Nenhuma peça cadastrada nesta categoria.</p>`;
     display.innerHTML = html;
     return;
   }
@@ -145,7 +145,7 @@ function vestirPeca(nome, categoria, imagemUrl, zIndex) {
   camada.style.height = rectManequim.height + 'px';
   camada.style.objectFit = 'contain';
   camada.style.pointerEvents = 'none';
-  camada.style.zIndex = (Number(zIndex) || 1) + 10;
+  camada.style.zIndex = (normalizar(nome).includes('oculos') || chaveCat.includes('oculos')) ? 90 : (Number(zIndex) || 1) + 10;
   camada.style.transformOrigin = ajuste.origin;
   camada.style.transform = `translate(${ajuste.x}%, ${ajuste.y}%) scale(${ajuste.scaleX}, ${ajuste.scaleY})`;
 
@@ -162,7 +162,7 @@ function renderizarGuardaRoupa() {
   if (!container) return;
 
   if (todasAsPecas.length === 0) {
-    container.innerHTML = `<p style="color: #94a3b8;">Nenhuma peÃ§a cadastrada no momento.</p>`;
+    container.innerHTML = `<p style="color: #94a3b8;">Nenhuma peça cadastrada no momento.</p>`;
     return;
   }
 
@@ -187,7 +187,7 @@ function renderizarGuardaRoupa() {
 function salvarLook() {
   const pecasVestidas = Object.values(lookAtual);
   if (pecasVestidas.length === 0) {
-    alert('Vista pelo menos uma peÃ§a no manequim antes de salvar!');
+    alert('Vista pelo menos uma peça no manequim antes de salvar!');
     return;
   }
 
@@ -219,7 +219,7 @@ function renderizarLooksSalvos() {
     const camadasHtml = look.pecas.map(p => {
       const chaveCat = normalizar(p.categoria);
       const ajuste = obterAjusteCamada(p.nome, chaveCat);
-      const z = (Number(p.zIndex) || 1) + 10;
+      const z = (normalizar(p.nome).includes('oculos') || chaveCat.includes('oculos')) ? 90 : (Number(p.zIndex) || 1) + 10;
       const src = corrigirUrlImagem(p.imagemUrl);
 
       return `
@@ -275,3 +275,4 @@ function excluirLookSalvo(id) {
   localStorage.setItem('befashion_looks', JSON.stringify(atualizados));
   renderizarLooksSalvos();
 }
+
