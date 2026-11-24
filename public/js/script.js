@@ -20,7 +20,7 @@ async function carregarPecas() {
   try {
     const res = await fetch('/api/pecas');
     const dados = await res.json();
-    todasAsPecas = dados;
+    todasAsPecas = dados.filter(p => !normalizar(p.nome).includes('caveira') && !normalizar(p.nome).includes('saia branca franzida'));
   } catch (err) {
     console.error('Erro ao carregar peças:', err);
   }
