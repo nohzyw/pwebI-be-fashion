@@ -1,4 +1,5 @@
 let todasAsPecas = [];
+let todosOsLooks = [];
 let lookAtual = {};
 
 const AJUSTES_CATEGORIAS = {
@@ -13,8 +14,54 @@ const AJUSTES_PECAS = {};
 document.addEventListener('DOMContentLoaded', async () => {
   await carregarPecas();
   renderizarGuardaRoupa();
-  renderizarLooksSalvos();
+  await renderizarLooksSalvos();
 });
+
+function mostrarAviso(mensagem, tipo = 'sucesso') {
+  const anterior = document.getElementById('toast-aviso');
+  if (anterior) anterior.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'toast-aviso';
+  toast.textContent = mensagem;
+
+  const corFundo = tipo === 'erro' ? '#ef4444' : '#38bdf8';
+  const corTexto = tipo === 'erro' ? '#ffffff' : '#0f172a';
+
+  Object.assign(toast.style, {
+    position: 'fixed',
+    bottom: '24px',
+    right: '24px',
+    backgroundColor: corFundo,
+    color: corTexto,
+    padding: '12px 20px',
+    borderRadius: '10px',
+    fontWeight: '600',
+    fontSize: '0.95rem',
+    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.35)',
+    cursor: 'pointer',
+    zIndex: '9999',
+    opacity: '0',
+    transform: 'translateY(12px)',
+    transition: 'opacity 0.25s ease, transform 0.25s ease'
+  });
+
+  const fechar = () => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(12px)';
+    setTimeout(() => toast.remove(), 250);
+  };
+
+  toast.addEventListener('click', fechar);
+  document.body.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+  });
+
+  setTimeout(fechar, 2000);
+}
 
 async function carregarPecas() {
   try {
@@ -22,7 +69,7 @@ async function carregarPecas() {
     const dados = await res.json();
     todasAsPecas = dados.filter(p => !normalizar(p.nome).includes('caveira') && !normalizar(p.nome).includes('saia branca franzida'));
   } catch (err) {
-    console.error('Erro ao carregar peças:', err);
+    console.error('Erro ao carregar peÃ§as:', err);
   }
 }
 
@@ -79,14 +126,19 @@ async function selectCategory(categoryName) {
     await carregarPecas();
   }
 
+  const catBuscada = normalizar(categoryName);
+  const categoriasAceitas = catBuscada === 'shorts'
+    ? ['shorts', 'short', 'calcas', 'calca']
+    : [catBuscada];
+
   const filtradas = todasAsPecas.filter(
-    p => normalizar(p.categoria) === normalizar(categoryName)
+    p => categoriasAceitas.includes(normalizar(p.categoria))
   );
 
-  let html = `<p style="color: #38bdf8; font-weight: bold; margin-bottom: 12px;">Exibindo peças para: ${categoryName.toUpperCase()}</p>`;
+  let html = `<p style="color: #38bdf8; font-weight: bold; margin-bottom: 12px;">Exibindo peÃ§as para: ${categoryName.toUpperCase()}</p>`;
 
   if (filtradas.length === 0) {
-    html += `<p style="color: #94a3b8; font-size: 0.9rem;">Nenhuma peça cadastrada nesta categoria.</p>`;
+    html += `<p style="color: #94a3b8; font-size: 0.9rem;">Nenhuma peÃ§a cadastrada nesta categoria.</p>`;
     display.innerHTML = html;
     return;
   }
@@ -162,7 +214,7 @@ function renderizarGuardaRoupa() {
   if (!container) return;
 
   if (todasAsPecas.length === 0) {
-    container.innerHTML = `<p style="color: #94a3b8;">Nenhuma peça cadastrada no momento.</p>`;
+    container.innerHTML = `<p style="color: #94a3b8;">Nenhuma peÃ§a cadastrada no momento.</p>`;
     return;
   }
 
@@ -184,38 +236,51 @@ function renderizarGuardaRoupa() {
   container.innerHTML = html;
 }
 
-function salvarLook() {
+async function salvarLook() {
   const pecasVestidas = Object.values(lookAtual);
   if (pecasVestidas.length === 0) {
-    alert('Vista pelo menos uma peça no manequim antes de salvar!');
+    mostrarAviso('Vista pelo menos uma peÃ§a no manequim antes de salvar!', 'erro');
     return;
   }
 
-  const salvos = JSON.parse(localStorage.getItem('befashion_looks') || '[]');
-  salvos.push({
-    id: Date.now(),
-    data: new Date().toLocaleDateString('pt-BR'),
-    pecas: pecasVestidas
-  });
-  localStorage.setItem('befashion_looks', JSON.stringify(salvos));
+  try {
+    const res = await fetch('/api/looks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pecas: pecasVestidas })
+    });
 
-  alert('Look salvo com sucesso em "Meus Looks"!');
-  renderizarLooksSalvos();
+    if (!res.ok) throw new Error('Falha ao salvar no banco');
+
+    mostrarAviso('Look salvo no MongoDB com sucesso!');
+    await renderizarLooksSalvos();
+  } catch (err) {
+    console.error('Erro ao salvar look:', err);
+    mostrarAviso('Erro ao salvar look no servidor.', 'erro');
+  }
 }
 
-function renderizarLooksSalvos() {
+async function renderizarLooksSalvos() {
   const container = document.getElementById('saved-looks-list');
   if (!container) return;
 
-  const salvos = JSON.parse(localStorage.getItem('befashion_looks') || '[]');
-  if (salvos.length === 0) {
+  try {
+    const res = await fetch('/api/looks');
+    todosOsLooks = await res.json();
+  } catch (err) {
+    console.error('Erro ao carregar looks salvos:', err);
+    container.innerHTML = `<p style="color: #ef4444; margin-top: 10px;">Erro ao carregar looks do banco.</p>`;
+    return;
+  }
+
+  if (todosOsLooks.length === 0) {
     container.innerHTML = `<p style="color: #94a3b8; margin-top: 10px;">Nenhum look guardado ainda.</p>`;
     return;
   }
 
   let html = `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; max-width: 960px; margin: 20px auto;">`;
 
-  salvos.forEach((look, index) => {
+  todosOsLooks.forEach((look, index) => {
     const camadasHtml = look.pecas.map(p => {
       const chaveCat = normalizar(p.categoria);
       const ajuste = obterAjusteCamada(p.nome, chaveCat);
@@ -231,7 +296,7 @@ function renderizarLooksSalvos() {
     html += `
       <div style="background: rgba(255,255,255,0.05); border: 1px solid #334155; border-radius: 12px; padding: 15px; text-align: center;">
         <h4 style="color: #38bdf8; margin-bottom: 4px;">Look #${index + 1}</h4>
-        <p style="color: #94a3b8; font-size: 0.75rem; margin-bottom: 10px;">Salvo em ${look.data}</p>
+        <p style="color: #94a3b8; font-size: 0.75rem; margin-bottom: 10px;">Salvo em ${look.data || ''}</p>
 
         <div style="position: relative; width: 180px; height: 270px; margin: 0 auto 12px; background: rgba(15, 23, 42, 0.6); border-radius: 8px; overflow: hidden;">
           <img src="/assets/manequim-frente.png" alt="Manequim" style="width: 100%; height: 100%; object-fit: contain; display: block;">
@@ -239,10 +304,10 @@ function renderizarLooksSalvos() {
         </div>
 
         <div style="display: flex; gap: 8px; justify-content: center;">
-          <button onclick="experimentarLookSalvo(${look.id})" style="padding: 6px 12px; font-size: 0.8rem; cursor: pointer; background: #38bdf8; color: #0f172a; border: none; border-radius: 6px; font-weight: 600;">
+          <button onclick="experimentarLookSalvo('${look._id}')" style="padding: 6px 12px; font-size: 0.8rem; cursor: pointer; background: #38bdf8; color: #0f172a; border: none; border-radius: 6px; font-weight: 600;">
             Usar no Provador
           </button>
-          <button onclick="excluirLookSalvo(${look.id})" style="padding: 6px 10px; font-size: 0.8rem; cursor: pointer; background: #ef4444; color: #fff; border: none; border-radius: 6px;">
+          <button onclick="excluirLookSalvo('${look._id}')" style="padding: 6px 10px; font-size: 0.8rem; cursor: pointer; background: #ef4444; color: #fff; border: none; border-radius: 6px;">
             Excluir
           </button>
         </div>
@@ -255,8 +320,7 @@ function renderizarLooksSalvos() {
 }
 
 function experimentarLookSalvo(id) {
-  const salvos = JSON.parse(localStorage.getItem('befashion_looks') || '[]');
-  const look = salvos.find(l => l.id === id);
+  const look = todosOsLooks.find(l => l._id === id);
   if (!look) return;
 
   navigate('provador');
@@ -269,10 +333,15 @@ function experimentarLookSalvo(id) {
   });
 }
 
-function excluirLookSalvo(id) {
-  const salvos = JSON.parse(localStorage.getItem('befashion_looks') || '[]');
-  const atualizados = salvos.filter(l => l.id !== id);
-  localStorage.setItem('befashion_looks', JSON.stringify(atualizados));
-  renderizarLooksSalvos();
-}
+async function excluirLookSalvo(id) {
+  try {
+    const res = await fetch(`/api/looks/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Falha ao excluir');
 
+    mostrarAviso('Look removido!');
+    await renderizarLooksSalvos();
+  } catch (err) {
+    console.error('Erro ao excluir look:', err);
+    mostrarAviso('Erro ao excluir look.', 'erro');
+  }
+}
